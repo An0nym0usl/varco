@@ -1,0 +1,148 @@
+// Manual checks that automated tools cannot decide. Each one maps to WCAG criteria (sc) and
+// explains how a non-specialist can test it in a few minutes.
+export default [
+  {
+    id: 'tastiera', g: 'Tastiera', sc: ['2.1.1', '2.1.2'],
+    t: 'Tutto funziona con la sola tastiera',
+    how: 'Metti da parte il mouse. Con Tab e Maiusc+Tab raggiungi ogni link, pulsante e campo; attivali con Invio o Spazio. Apri e chiudi menu, filtri e finestre.',
+    why: 'Chi non usa il mouse (disabilità motorie, lettori di schermo) deve poter fare tutto, compreso acquistare.',
+  },
+  {
+    id: 'trappole', g: 'Tastiera', sc: ['2.1.2'],
+    t: 'Il focus non resta mai intrappolato',
+    how: 'Durante il test con Tab, controlla di poter sempre uscire da finestre modali, video, mappe e widget di chat (Tab, Maiusc+Tab o Esc).',
+    why: 'Una trappola da tastiera blocca completamente la navigazione.',
+  },
+  {
+    id: 'focus-visibile', g: 'Tastiera', sc: ['2.4.7', '2.4.11'],
+    t: 'Si vede sempre dove si trova il focus',
+    how: 'Mentre premi Tab, ogni elemento attivo deve mostrare un contorno o un cambio di stile ben visibile, e non deve finire nascosto sotto barre fisse o banner dei cookie.',
+    why: 'Senza indicatore di focus chi usa la tastiera non sa dove si trova.',
+  },
+  {
+    id: 'ordine-focus', g: 'Tastiera', sc: ['2.4.3'],
+    t: "L'ordine del focus è logico",
+    how: 'Il focus segue l\'ordine di lettura (dall\'alto in basso, da sinistra a destra) e, aprendo un menu o una finestra, ci entra subito.',
+    why: 'Un ordine casuale rende la pagina incomprensibile per chi naviga in sequenza.',
+  },
+  {
+    id: 'zoom', g: 'Lettura', sc: ['1.4.4'],
+    t: 'Il testo si legge con lo zoom al 200%',
+    how: 'Premi Ctrl e + (Cmd e + su Mac) fino al 200%. Il testo deve restare leggibile, senza parti tagliate o sovrapposte.',
+    why: 'Molte persone ipovedenti e anziane ingrandiscono la pagina.',
+  },
+  {
+    id: 'reflow', g: 'Lettura', sc: ['1.4.10'],
+    t: 'La pagina si adatta a uno schermo stretto',
+    how: 'Porta lo zoom al 400% su una finestra larga 1280px (equivale a 320px). Il contenuto deve scorrere solo in verticale, senza dover scorrere anche in orizzontale per leggere.',
+    why: 'Con ingrandimenti forti, lo scorrimento in due direzioni rende la lettura faticosissima.',
+  },
+  {
+    id: 'spaziatura', g: 'Lettura', sc: ['1.4.12'],
+    t: 'Il testo regge una spaziatura maggiore',
+    how: 'Con un\'estensione per la spaziatura del testo aumenta interlinea (1,5), spazio tra paragrafi, lettere e parole. Nessun testo deve venire tagliato o sovrapposto.',
+    why: 'Persone con dislessia o ipovisione usano spaziature personalizzate.',
+  },
+  {
+    id: 'contrasto-componenti', g: 'Lettura', sc: ['1.4.11'],
+    t: 'Bordi dei campi, icone e indicatori si distinguono',
+    how: 'Guarda i bordi dei campi del modulo, le icone senza testo, le caselle di spunta e l\'indicatore di focus: devono avere un contrasto di almeno 3:1 con lo sfondo.',
+    why: 'Un campo con bordo grigio chiarissimo è invisibile per molti utenti.',
+  },
+  {
+    id: 'colore', g: 'Lettura', sc: ['1.4.1', '1.3.3'],
+    t: 'Il colore non è l\'unico modo di dare informazioni',
+    how: 'Errori, campi obbligatori, disponibilità del prodotto e link devono essere riconoscibili anche senza colori (testo, icona, sottolineatura).',
+    why: 'Circa l\'8% degli uomini ha una forma di daltonismo.',
+  },
+  {
+    id: 'alt-qualita', g: 'Immagini e media', sc: ['1.1.1'],
+    t: 'I testi alternativi sono utili, non solo presenti',
+    how: 'Rileggi gli alt delle immagini principali: descrivono ciò che serve (prodotto, dettaglio, testo nell\'immagine)? Le immagini decorative hanno alt vuoto?',
+    why: 'Gli strumenti automatici controllano che l\'alt ci sia, non che sia corretto.',
+  },
+  {
+    id: 'sottotitoli', g: 'Immagini e media', sc: ['1.2.1', '1.2.2'],
+    t: 'Video sottotitolati e audio trascritti',
+    how: 'Ogni video con parlato ha sottotitoli corretti (non solo automatici); ogni contenuto solo audio ha una trascrizione.',
+    why: 'È l\'unico modo per le persone sorde di accedere a quei contenuti.',
+  },
+  {
+    id: 'audiodescrizione', g: 'Immagini e media', sc: ['1.2.3', '1.2.5'],
+    t: 'Le informazioni visive dei video sono descritte',
+    how: 'Se un video mostra informazioni importanti solo visivamente (testi a schermo, dimostrazioni), offri un\'audiodescrizione o una descrizione testuale.',
+    why: 'Chi non vede perde tutto ciò che il video non dice a voce.',
+  },
+  {
+    id: 'movimento', g: 'Immagini e media', sc: ['2.2.2', '2.3.1'],
+    t: 'Caroselli e animazioni si possono fermare',
+    how: 'Slider, caroselli e banner animati che durano più di 5 secondi hanno un pulsante pausa. Nessun contenuto lampeggia più di 3 volte al secondo.',
+    why: 'Il movimento continuo disturba chi ha difficoltà di attenzione; i lampeggi possono causare crisi.',
+  },
+  {
+    id: 'hover', g: 'Interazione', sc: ['1.4.13'],
+    t: 'Tooltip e menu a comparsa sono gestibili',
+    how: 'I contenuti che compaiono al passaggio del mouse o al focus si chiudono con Esc, restano visibili mentre ci passi sopra e non coprono ciò che stai leggendo.',
+    why: 'Chi usa l\'ingrandimento deve poter muovere il puntatore sul contenuto apparso.',
+  },
+  {
+    id: 'errori', g: 'Moduli', sc: ['3.3.1', '3.3.3'],
+    t: 'Gli errori nei moduli sono spiegati a parole',
+    how: 'Invia un modulo con errori: il messaggio dice quale campo è sbagliato e come correggerlo, non solo un bordo rosso.',
+    why: 'Senza indicazioni testuali, chi non vede o ha difficoltà cognitive non riesce a completare il modulo.',
+  },
+  {
+    id: 'istruzioni', g: 'Moduli', sc: ['3.3.2'],
+    t: 'Campi obbligatori e formati sono indicati',
+    how: 'Prima di compilare si capisce quali campi sono obbligatori e in che formato inserire dati come data, telefono o codice fiscale.',
+    why: 'Evita errori e frustrazione, soprattutto nel checkout.',
+  },
+  {
+    id: 'tempo', g: 'Moduli', sc: ['2.2.1'],
+    t: 'I limiti di tempo si possono estendere',
+    how: 'Se carrello, prenotazione o sessione scadono, l\'utente viene avvisato prima e può prolungare il tempo.',
+    why: 'Chi usa tecnologie assistive impiega più tempo a completare le operazioni.',
+  },
+  {
+    id: 'autenticazione', g: 'Moduli', sc: ['3.3.8'],
+    t: 'Accesso senza test di memoria o rompicapo',
+    how: 'Il login permette di incollare la password e usare il gestore di password; eventuali CAPTCHA hanno un\'alternativa accessibile.',
+    why: 'Ricordare o trascrivere codici è un ostacolo per molte persone con disabilità cognitive.',
+  },
+  {
+    id: 'acquisto', g: 'Percorso di acquisto', sc: ['2.1.1', '4.1.2', '3.3.4'],
+    t: 'Il percorso di acquisto è completo e accessibile',
+    how: 'Ripeti con tastiera (e se puoi con un lettore di schermo) l\'intero percorso: ricerca, scheda prodotto, carrello, registrazione o accesso, pagamento, conferma. Prima di pagare si può rivedere e correggere l\'ordine.',
+    why: "L'EAA chiede espressamente che identificazione, sicurezza e pagamento siano accessibili nei servizi di commercio elettronico (Allegato I, sezione IV, lettera g).",
+  },
+  {
+    id: 'lettore-schermo', g: 'Tecnologie assistive', sc: ['1.3.1', '4.1.2'],
+    t: 'Prova rapida con un lettore di schermo',
+    how: 'Usa NVDA (gratuito, Windows), VoiceOver (Mac e iPhone) o TalkBack (Android). Verifica che titoli, menu, pulsanti e campi siano annunciati con nomi comprensibili.',
+    why: 'È il test più vicino all\'esperienza reale delle persone cieche.',
+  },
+  {
+    id: 'messaggi-stato', g: 'Tecnologie assistive', sc: ['4.1.3'],
+    t: 'I messaggi di stato vengono annunciati',
+    how: 'Messaggi come «Aggiunto al carrello», «3 risultati» o errori di invio vengono letti dal lettore di schermo senza spostare il focus.',
+    why: 'Altrimenti chi non vede non sa se l\'azione è riuscita.',
+  },
+  {
+    id: 'aiuto', g: 'Coerenza', sc: ['3.2.3', '3.2.6'],
+    t: 'Menu e aiuto sono sempre nello stesso posto',
+    how: 'Navigazione, contatti e assistenza appaiono nella stessa posizione e con lo stesso nome in tutte le pagine.',
+    why: 'La coerenza aiuta chi ha difficoltà di orientamento o di memoria.',
+  },
+  {
+    id: 'documenti', g: 'Contenuti', sc: ['1.1.1', '1.3.1'],
+    t: 'Documenti scaricabili accessibili',
+    how: 'Schede prodotto, condizioni di vendita e moduli in PDF sono accessibili (testo selezionabile, titoli, ordine di lettura) oppure disponibili anche come pagina web.',
+    why: 'Un PDF scansionato è un\'immagine: illeggibile per i lettori di schermo.',
+  },
+  {
+    id: 'informazioni-eaa', g: 'Contenuti', sc: [],
+    t: "Le informazioni sull'accessibilità del servizio sono pubblicate",
+    how: 'Le condizioni generali (o una pagina equivalente) descrivono il servizio e spiegano come soddisfa i requisiti di accessibilità, con un contatto per segnalazioni. Puoi crearle con il generatore di Varco.',
+    why: "È richiesto dall'art. 13 e dall'Allegato V della Direttiva (UE) 2019/882 per i fornitori di servizi obbligati.",
+  },
+];

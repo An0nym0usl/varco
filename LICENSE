@@ -1,0 +1,10 @@
+Copyright (c) 2026 the owner of the Varco project. All rights reserved.
+
+The source code of Varco is published so that anyone can audit what runs in their browser.
+Publication does not grant permission to copy, modify, redistribute or offer it as a service,
+except where the law allows it without permission.
+
+Third-party components keep their own licenses:
+- axe-core by Deque Systems — Mozilla Public License 2.0 (distributed unmodified in dist/vendor and dist/agent.js)
+- Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono (Braille Institute) — SIL Open Font License 1.1
+- Overpass — SIL Open Font License 1.1

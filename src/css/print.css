@@ -1,0 +1,21 @@
+/* Printable report (and any page): clean A4, ink on white, no navigation. */
+@page { size: A4; margin: 16mm 14mm 18mm; }
+:root { --ink: #000; --ink-2: #333; --paper: #fff; --card: #fff; --line: #bbb; --code-bg: #f2f2f2; --code-fg: #000; --shadow: none; }
+body { background: #fff; color: #000; font-size: 10.5pt; line-height: 1.45; }
+.site-header, .site-footer, .skip, .no-print, .toolbar, .nav-toggle, .plan-badge, .button, form, .scan-stage, .upsell { display: none !important; }
+.print-only { display: block !important; }
+.wrap { width: 100%; }
+.page-head { padding: 0 0 8pt; }
+h1 { font-size: 20pt; }
+h2 { font-size: 14pt; break-after: avoid; }
+h3 { font-size: 12pt; break-after: avoid; }
+a { color: #000; text-decoration: underline; }
+.card, .issue { box-shadow: none; break-inside: avoid-page; }
+.issue { border: 1pt solid #999; border-left-width: 6pt; padding: 8pt 10pt; }
+details > summary { list-style: none; font-weight: 700; }
+details > summary::-webkit-details-marker { display: none; }
+pre.snippet, .code-compare pre { border: 1pt solid #ccc; font-size: 8.5pt; }
+.counts li { border: 1pt solid #999; }
+.print-cover { border-bottom: 2pt solid #000; padding-bottom: 10pt; margin-bottom: 14pt; }
+.print-cover img { max-height: 40pt; max-width: 160pt; }
+.print-cover .cover-row { display: flex; justify-content: space-between; align-items: center; gap: 12pt; }

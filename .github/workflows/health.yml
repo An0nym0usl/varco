@@ -1,0 +1,41 @@
+name: Production health check
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SITE: https://an0nym0usl.github.io/varco/
+      TITLE: 'Healthcheck fallito: il sito di produzione non risponde come previsto'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check production
+        id: smoke
+        continue-on-error: true
+        run: node scripts/smoke.mjs "$SITE" | tee smoke.txt
+      - name: Open or update the incident issue
+        if: steps.smoke.outcome == 'failure'
+        run: |
+          body=$(printf 'Controllo del %s UTC fallito.\n\n```\n%s\n```\n\nRun: %s/%s/actions/runs/%s' "$(date -u '+%Y-%m-%d %H:%M')" "$(cat smoke.txt)" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID")
+          number=$(gh issue list --state open --search "in:title \"$TITLE\"" --json number --jq '.[0].number')
+          if [ -n "$number" ]; then gh issue comment "$number" --body "$body"; else gh issue create --title "$TITLE" --body "$body"; fi
+          exit 1
+      - name: Close the incident issue when healthy
+        if: steps.smoke.outcome == 'success'
+        run: |
+          for number in $(gh issue list --state open --search "in:title \"$TITLE\"" --json number --jq '.[].number'); do
+            gh issue close "$number" --comment "Di nuovo raggiungibile il $(date -u '+%Y-%m-%d %H:%M') UTC."
+          done

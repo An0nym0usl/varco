@@ -1,0 +1,39 @@
+{
+  "site": {
+    "name": "Varco",
+    "origin": "https://an0nym0usl.github.io",
+    "base": "/varco",
+    "repo": "https://github.com/An0nym0usl/varco",
+    "lang": "it"
+  },
+  "owner": {
+    "legalName": "",
+    "vatNumber": "",
+    "address": "",
+    "contactEmail": ""
+  },
+  "payments": {
+    "provider": "polar",
+    "sandbox": false,
+    "organizationId": "",
+    "checkout": {
+      "pro": "",
+      "agenzia": ""
+    },
+    "benefits": {
+      "pro": "",
+      "agenzia": ""
+    },
+    "prices": {
+      "pro": 49,
+      "agenzia": 149
+    }
+  },
+  "analytics": {
+    "provider": "none",
+    "token": ""
+  },
+  "psi": {
+    "apiKey": ""
+  }
+}
