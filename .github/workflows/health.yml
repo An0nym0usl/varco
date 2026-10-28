@@ -18,7 +18,7 @@ jobs:
       SITE: https://an0nym0usl.github.io/varco/
       TITLE: 'Healthcheck fallito: il sito di produzione non risponde come previsto'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: 24
