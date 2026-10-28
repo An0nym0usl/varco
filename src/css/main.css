@@ -364,6 +364,22 @@ pre.snippet, .code-compare pre { background: var(--code-bg); color: var(--code-f
 .cta-card .button--primary { background: var(--signal); border-color: var(--signal); color: #15181b; }
 .cta-card :focus-visible { outline-color: var(--signal); }
 
+/* URL scan form */
+.method--url { margin-bottom: 20px; border: 3px solid var(--signal); }
+.url-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.url-row input { flex: 1 1 280px; }
+
+/* Agency workflow: a real sequence, so it is numbered; each step is a tactile "direction" tile. */
+.flow { list-style: none; counter-reset: flow; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.flow li { counter-increment: flow; position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px 16px 64px; }
+.flow li::before {
+  content: counter(flow); position: absolute; left: 14px; top: 14px; width: 36px; height: 36px; border-radius: 8px;
+  display: grid; place-items: center; font: 900 1.1rem/1 var(--font-display); color: #15181b;
+  background-color: var(--signal); background-image: repeating-linear-gradient(90deg, transparent 0 4px, var(--ridge) 4px 7px);
+}
+.flow-t { display: block; font: 800 1.08rem/1.25 var(--font-display); margin-bottom: 4px; }
+.flow-d { color: var(--ink-2); }
+
 /* Data tables in guides: the wrapper scrolls on phones so the page never does. */
 .table-wrap { overflow-x: auto; margin-bottom: 1em; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
 .cases { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 0.97rem; }

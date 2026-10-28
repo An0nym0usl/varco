@@ -1,6 +1,7 @@
 import { $, getConfig, currentPlan, download, formatDateTime, hostOf } from '../lib/ui.js';
 import { html } from '../lib/escape.js';
-import { normalizeScan, reviveScan } from '../lib/normalize.js';
+import { normalizeScan, reviveScan, summarize } from '../lib/normalize.js';
+import { track } from '../lib/analytics.js';
 import { getLastScan, setLastScan, getProjects, saveScan, deleteScan, findScan, read, write } from '../lib/store.js';
 import { limits } from '../lib/plan.js';
 import { reportHtml, summaryText, ruleTitle } from '../lib/report-view.js';
@@ -85,16 +86,19 @@ function onAction(e) {
   const act = btn.dataset.action;
   if (act === 'save') {
     const res = saveScan(current, { projectName: hostOf(current.url) || 'Analisi senza indirizzo', maxSaved: lim.maxSavedScans });
+    track('report_saved', { result: res.ok ? 'ok' : res.reason, plan: lim.plan });
     if (res.ok) actionStatus(res.already ? 'Questo report è già salvato.' : 'Report salvato in questo browser.');
     else if (res.reason === 'limit') actionStatus(`Hai raggiunto il limite di ${lim.maxSavedScans} report salvati del piano Gratis. Elimina un report o passa a Pro.`);
     else actionStatus('Il browser non permette di salvare (memoria piena o navigazione privata).');
     renderProjects();
   } else if (act === 'print') {
+    track('report_print', { branded: lim.whiteLabel });
     const closed = [...document.querySelectorAll('details:not([open])')];
     closed.forEach((d) => { d.open = true; });
     window.print();
     closed.forEach((d) => { d.open = false; });
   } else if (act === 'csv' || act === 'json') {
+    track('export', { format: act, allowed: lim.exportData });
     if (!lim.exportData) { actionStatus(`${upsell("L'esportazione")} Puoi comunque stampare il report o salvarlo in PDF.`); return; }
     if (act === 'csv') download(`${slug(current)}.csv`, `﻿${scanToCsv(current, ruleTitle)}`, 'text/csv;charset=utf-8');
     else download(`${slug(current)}.json`, scanToJson(current), 'application/json');
@@ -132,6 +136,7 @@ $('[data-import-form]').addEventListener('submit', async (e) => {
     const scan = data && data.id && data.v === 1 ? reviveScan(data) : normalizeScan(data, 'import');
     setLastScan(scan);
     render(scan);
+    track('scan_imported');
     status('Risultati importati.');
     $('h1').scrollIntoView();
   } catch {
@@ -154,6 +159,7 @@ function receiveFromAgent() {
     try {
       const scan = normalizeScan(ev.data.scan, 'bookmarklet');
       setLastScan(scan);
+      track('scan_completed', { source: 'bookmarklet', rules_failed: summarize(scan).rulesFailed });
       history.replaceState(null, '', location.pathname);
       render(scan);
       status('Risultati ricevuti dal pulsante Varco.');

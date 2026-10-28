@@ -6,7 +6,7 @@ export const LIMITS = { rules: 150, nodes: 50, text: 600, target: 300, title: 20
 const IMPACTS = ['critical', 'serious', 'moderate', 'minor'];
 const RULE_ID = /^[a-z0-9-]{2,60}$/;
 const TAG = /^[A-Za-z0-9.-]{1,40}$/;
-const SOURCES = ['bookmarklet', 'demo', 'paste', 'import'];
+const SOURCES = ['bookmarklet', 'demo', 'paste', 'url', 'import'];
 
 const str = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
 const int = (v, max) => (Number.isInteger(v) && v >= 0 ? Math.min(v, max) : 0);

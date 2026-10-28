@@ -153,13 +153,17 @@ test('statement generator uses scan results, checklist and the plan credit', asy
 });
 
 test('license activation unlocks paid features (Polar sandbox mocked)', async ({ page }) => {
-  await page.route('https://sandbox-api.polar.sh/v1/customer-portal/license-keys/validate', async (route) => {
+  const calls = [];
+  await page.route('https://sandbox-api.polar.sh/v1/customer-portal/license-keys/*', async (route) => {
+    const action = route.request().url().split('/').pop();
     const body = route.request().postDataJSON();
-    if (body.key === 'VARCO-PRO-TEST-KEY' && body.organization_id === '00000000-0000-4000-8000-000000000001') {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'granted', benefit_id: '00000000-0000-4000-8000-0000000000aa', display_key: '****-TEST', expires_at: null }) });
-    } else {
-      await route.fulfill({ status: 404, contentType: 'application/json', body: '{"error":"ResourceNotFound"}' });
-    }
+    calls.push({ action, body });
+    const ok = body.key === 'VARCO-PRO-TEST-KEY' && body.organization_id === '00000000-0000-4000-8000-000000000001';
+    const key = { status: 'granted', benefit_id: '00000000-0000-4000-8000-0000000000aa', display_key: '****-TEST', expires_at: null, limit_activations: 3 };
+    if (!ok) return route.fulfill({ status: 404, contentType: 'application/json', body: '{"error":"ResourceNotFound"}' });
+    if (action === 'activate') return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ id: 'act-test-1', label: body.label, license_key: key }) });
+    if (action === 'deactivate') return route.fulfill({ status: 204, body: '' });
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(key) });
   });
   await page.goto('/varco/licenza/');
   await page.getByLabel('Chiave di licenza').fill('WRONG-KEY-0000');
@@ -177,6 +181,77 @@ test('license activation unlocks paid features (Polar sandbox mocked)', async ({
   expect(csv.suggestedFilename()).toMatch(/^varco-.*\.csv$/);
   await page.goto('/varco/dichiarazione/');
   await expect(page.locator('[data-statement-preview]')).not.toContainText('Verifica preparata con');
+  // The device was registered with a readable label, and removing the license frees the slot.
+  expect(calls.find((c) => c.action === 'activate').body.label).toMatch(/ su /);
+  await page.goto('/varco/licenza/');
+  await page.getByRole('button', { name: 'Rimuovi la licenza da questo browser' }).click();
+  await expect(page.getByRole('heading', { name: 'Piano attuale: Gratis' })).toBeVisible();
+  expect(calls.some((c) => c.action === 'deactivate' && c.body.activation_id === 'act-test-1')).toBe(true);
+});
+
+const lighthouse = (audits) => ({
+  lighthouseResult: {
+    lighthouseVersion: '13.0.0', fetchTime: '2026-10-28T12:00:00.000Z', finalDisplayedUrl: 'https://www.esempio.it/',
+    categories: { accessibility: { auditRefs: Object.keys(audits).map((id) => ({ id })) } },
+    audits,
+  },
+});
+
+test('URL scan turns a PageSpeed result into an Italian report', async ({ page }) => {
+  let requested = '';
+  await page.route('https://www.googleapis.com/pagespeedonline/v5/runPagespeed**', (route) => {
+    requested = route.request().url();
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(lighthouse({
+      'image-alt': { score: 0, scoreDisplayMode: 'binary', title: 'Image elements do not have [alt]', details: { items: [{ node: { selector: 'main > img', snippet: '<img src="a.jpg">', explanation: 'Fix any of the following' } }, { node: { selector: 'footer img', snippet: '<img src="b.png">' } }] } },
+      'color-contrast': { score: 1, scoreDisplayMode: 'binary', title: 'ok' },
+      'document-title': { score: 1, scoreDisplayMode: 'binary', title: 'ok' },
+      'video-caption': { score: null, scoreDisplayMode: 'notApplicable', title: 'n/a' },
+      'logical-tab-order': { score: null, scoreDisplayMode: 'manual', title: 'manual' },
+    })) });
+  });
+  await page.goto('/varco/verifica/');
+  await page.getByLabel('Indirizzo della pagina da controllare').fill('www.esempio.it');
+  await page.getByRole('button', { name: "Analizza l'indirizzo" }).click();
+  await page.waitForURL('**/varco/report/');
+  expect(new URL(requested).searchParams.get('url')).toBe('https://www.esempio.it/');
+  expect(new URL(requested).searchParams.get('category')).toBe('ACCESSIBILITY');
+  await expect(page.getByRole('heading', { name: 'Immagini senza testo alternativo', exact: true })).toBeVisible();
+  await expect(page.locator('.report-meta')).toContainText('Indirizzo (Google PageSpeed Insights)');
+  await expect(page.locator('[data-report-lead]')).toContainText('1 tipo di problema su 2 elementi. 2 regole superate');
+});
+
+test('URL scan explains quota and invalid addresses', async ({ page }) => {
+  await page.route('https://www.googleapis.com/pagespeedonline/v5/runPagespeed**', (route) => route.fulfill({ status: 429, contentType: 'application/json', body: '{"error":{"code":429}}' }));
+  await page.goto('/varco/verifica/');
+  await page.getByRole('button', { name: "Analizza l'indirizzo" }).click();
+  await expect(page.locator('[data-error-for="scanurl"]')).toContainText("Scrivi l'indirizzo completo");
+  await page.getByLabel('Indirizzo della pagina da controllare').fill('https://www.esempio.it/');
+  await page.getByRole('button', { name: "Analizza l'indirizzo" }).click();
+  await expect(page.locator('[data-error-for="scanurl"]')).toContainText('limite di oggi');
+  await expect(page.locator('#scan-url')).toHaveAttribute('aria-invalid', 'true');
+});
+
+test('analytics sends anonymous funnel events without scan content', async ({ page }) => {
+  const events = [];
+  await page.route('**/__ph/capture/', async (route) => {
+    events.push(route.request().postDataJSON());
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{"status":1}' });
+  });
+  await page.goto('/varco/?utm_source=linkedin&utm_medium=post');
+  await page.getByRole('button', { name: 'Analizza il negozio di prova' }).click();
+  await expect(page.locator('[data-demo-result]')).toBeVisible();
+  await expect.poll(() => events.map((e) => e.event)).toEqual(expect.arrayContaining(['$pageview', 'demo_run', 'scan_completed']));
+  const view = events.find((e) => e.event === '$pageview');
+  expect(view.api_key).toBe('phc_test_project_key');
+  expect(view.properties).toMatchObject({ utm_source: 'linkedin', utm_medium: 'post', path: '/varco/', $process_person_profile: false });
+  const done = events.find((e) => e.event === 'scan_completed');
+  expect(done.properties.source).toBe('demo');
+  expect(done.properties.rules_failed).toBeGreaterThan(0);
+  const all = JSON.stringify(events);
+  expect(all).not.toContain('negozio');
+  expect(all).not.toContain('<img');
+  expect(new Set(events.map((e) => e.properties.distinct_id)).size).toBe(1);
+  expect(await page.evaluate(() => document.cookie)).toBe('');
 });
 
 test('pricing links go through the tracked checkout page to Polar', async ({ page }) => {

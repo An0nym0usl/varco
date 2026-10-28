@@ -14,6 +14,20 @@ export default (ctx) => ({
   <p class="lead">Scegli come analizzare la pagina. In tutti i casi il controllo avviene nel tuo browser con axe-core, il motore open source usato anche da Google Lighthouse.</p>
 </div>
 
+${ctx.config.psi?.apiKey ? html`<div class="wrap">
+  <section class="card method method--url" aria-labelledby="metodo-indirizzo">
+    <h2 id="metodo-indirizzo">Inserisci l'indirizzo <span class="badge">Il più rapido</span></h2>
+    <form class="url-form" data-url-form novalidate>
+      <label for="scan-url">Indirizzo della pagina da controllare</label>
+      <div class="url-row">
+        <input id="scan-url" name="url" type="url" inputmode="url" placeholder="https://www.esempio.it/" autocomplete="url" aria-describedby="scan-url-help scan-url-err">
+        <button class="button button--primary" type="submit">Analizza l'indirizzo</button>
+      </div>
+      <p class="field-error" id="scan-url-err" data-error-for="scanurl"></p>
+      <p class="hint" id="scan-url-help">Solo pagine pubbliche. L'analisi è eseguita da Google PageSpeed Insights e richiede 20–40 secondi. Per carrello, checkout e pagine dietro accesso usa il pulsante Varco qui sotto.</p>
+    </form>
+  </section>
+</div>` : ''}
 <div class="wrap method-grid">
   <section class="card method method--main" aria-labelledby="metodo-pulsante">
     <h2 id="metodo-pulsante">Con il pulsante Varco <span class="badge">Consigliato</span></h2>

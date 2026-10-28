@@ -15,7 +15,7 @@ const NM = path.join(ROOT, 'node_modules');
 const configPath = process.env.VARCO_CONFIG ? path.resolve(ROOT, process.env.VARCO_CONFIG) : path.join(SRC, 'config.json');
 const config = JSON.parse(await readFile(configPath, 'utf8'));
 const pkg = JSON.parse(await readFile(path.join(ROOT, 'package.json'), 'utf8'));
-const origin = process.env.VARCO_ORIGIN ?? config.site.origin;
+const origin = process.env.VARCO_ORIGIN || config.site.origin;
 const base = process.env.VARCO_BASE ?? config.site.base;
 
 async function walk(dir) {
@@ -66,13 +66,15 @@ const agentUrl = `${origin}${base}/agent.js`;
 const bookmarklet = `javascript:(function(){if(window.__varcoAgent){window.__varcoAgent.show();return}var s=document.createElement('script');s.src='${agentUrl}';s.onerror=function(){alert('Varco non riesce ad analizzare questa pagina: il sito blocca gli script esterni. Usa la modalita "Incolla il codice HTML" su Varco.')};document.documentElement.appendChild(s)})();`;
 
 const cf = config.analytics.provider === 'cloudflare' && config.analytics.token;
+const ph = config.analytics.provider === 'posthog' && config.analytics.key ? new URL(config.analytics.host || 'https://eu.i.posthog.com').origin : '';
+const psi = config.psi?.apiKey ? ' https://www.googleapis.com' : '';
 const csp = [
   "default-src 'self'",
   `script-src 'self' ${origin}${cf ? ' https://static.cloudflareinsights.com' : ''}`,
   "style-src 'self' 'unsafe-inline' https: http:",
   "img-src 'self' data: blob: https: http:",
   "font-src 'self' data: https: http:",
-  `connect-src 'self' https://api.polar.sh https://sandbox-api.polar.sh${cf ? ' https://cloudflareinsights.com' : ''}`,
+  `connect-src 'self' https://api.polar.sh https://sandbox-api.polar.sh${cf ? ' https://cloudflareinsights.com' : ''}${ph ? ` ${ph}` : ''}${psi}`,
   "frame-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
@@ -98,8 +100,9 @@ const ctx = {
   asset: (p) => `${base}/${p}?v=${buildId}`,
 };
 
-const PAGES = ['home', 'verifica', 'report', 'obbligo', 'checklist', 'dichiarazione', 'prezzi', 'acquista', 'licenza', 'grazie', 'guida', 'esempio', 'microimprese', 'regole', 'legali', 'errore'];
+const PAGES = ['home', 'verifica', 'report', 'obbligo', 'checklist', 'dichiarazione', 'prezzi', 'acquista', 'licenza', 'grazie', 'guida', 'esempio', 'microimprese', 'agenzie', 'regole', 'legali', 'errore'];
 const written = [];
+const pageHashes = {};
 for (const name of PAGES) {
   const make = await imp(`pages/${name}.mjs`);
   for (const page of [].concat(await make(ctx))) {
@@ -107,8 +110,11 @@ for (const name of PAGES) {
     await mkdir(path.dirname(file), { recursive: true });
     await writeFile(file, layout(page, ctx));
     written.push(page);
+    // Hash of the content only (not of asset URLs), so IndexNow is told about real content changes.
+    if (!page.noindex && page.path !== '/404.html') pageHashes[page.path] = createHash('sha1').update(`${page.title}\n${page.description}\n${page.body}`).digest('hex').slice(0, 16);
   }
 }
+await writeFile(path.join(DIST, 'pages.json'), JSON.stringify({ site: `${origin}${base}`, key: config.seo?.indexNowKey ?? '', pages: pageHashes }));
 
 const demo = (await readFile(path.join(SRC, 'demo/negozio.html'), 'utf8')).replaceAll('{{BASE}}', base).replaceAll('{{V}}', buildId);
 await mkdir(path.join(DIST, 'demo/negozio'), { recursive: true });
@@ -118,6 +124,9 @@ const today = new Date().toISOString().slice(0, 10);
 const urls = written.filter((p) => !p.noindex && p.path !== '/404.html');
 await writeFile(path.join(DIST, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((p) => `  <url><loc>${origin}${base}${p.path}</loc><lastmod>${today}</lastmod></url>`).join('\n')}\n</urlset>\n`);
 await writeFile(path.join(DIST, '.nojekyll'), '');
+// IndexNow ownership file: lets Bing, Yandex, Seznam and Naver be notified of new URLs under /varco/.
+const indexNowKey = config.seo?.indexNowKey;
+if (indexNowKey && /^[a-f0-9]{32}$/.test(indexNowKey)) await writeFile(path.join(DIST, `${indexNowKey}.txt`), indexNowKey);
 await writeFile(path.join(DIST, 'version.json'), JSON.stringify({ version: pkg.version, build: buildId, axe: axeVersion, builtAt: new Date().toISOString() }));
 
 const size = (await stat(path.join(DIST, 'agent.js'))).size;

@@ -6,20 +6,27 @@ export const NAV = [
   ['checklist', '/checklist/', 'Checklist'],
   ['dichiarazione', '/dichiarazione/', 'Dichiarazione'],
   ['guida', '/guida/european-accessibility-act/', 'Guida EAA'],
+  ['agenzie', '/agenzie/', 'Per le agenzie'],
   ['prezzi', '/prezzi/', 'Prezzi'],
 ];
 
 export const logo = (cls = 'logo') => raw(`<svg class="${cls}" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="32" rx="7" fill="#ffc20e"/><path d="M10 27V15a6 6 0 0 1 12 0v12z" fill="#15181b"/></svg>`);
 
+// Everything here ends up in every page: only values that are public by design (Polar IDs, the PostHog
+// project key, a referrer-restricted PageSpeed key). Secrets never belong in src/config.json.
 function publicConfig(ctx) {
   const p = ctx.config.payments;
+  const a = ctx.config.analytics;
   return {
     origin: ctx.origin,
     base: ctx.base,
     version: ctx.version,
     build: ctx.buildId,
     repo: ctx.config.site.repo,
+    feedback: ctx.config.site.feedback,
     payments: { sandbox: p.sandbox, organizationId: p.organizationId, checkout: p.checkout, benefits: p.benefits, prices: p.prices },
+    analytics: a.provider === 'posthog' ? { provider: 'posthog', key: a.key, host: a.host } : { provider: a.provider },
+    psi: { key: ctx.config.psi?.apiKey ?? '' },
   };
 }
 
@@ -51,6 +58,8 @@ ${canonical ? html`<meta property="og:url" content="${canonical}">` : ''}
 <meta property="og:image" content="${abs('/og.png')}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#15181b">
+${ctx.config.seo?.googleSiteVerification ? html`<meta name="google-site-verification" content="${ctx.config.seo.googleSiteVerification}">` : ''}
+${ctx.config.seo?.bingSiteVerification ? html`<meta name="msvalidate.01" content="${ctx.config.seo.bingSiteVerification}">` : ''}
 <link rel="icon" href="${url('/favicon.svg')}" type="image/svg+xml">
 <link rel="preload" href="${url('/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="${url('/fonts/overpass-latin-wght-normal.woff2')}" as="font" type="font/woff2" crossorigin>
@@ -100,6 +109,7 @@ ${raw(String(page.body))}
         <li><a href="${url('/regole/')}">Regole di accessibilità</a></li>
         <li><a href="${url('/prezzi/')}">Prezzi</a></li>
         <li><a href="${url('/licenza/')}">Attiva una licenza</a></li>
+        <li><a href="${ctx.config.site.feedback}">Feedback e richieste</a></li>
         <li><a href="${ctx.config.site.repo}">Codice sorgente</a></li>
       </ul>
     </nav>

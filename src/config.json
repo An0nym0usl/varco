@@ -4,6 +4,7 @@
     "origin": "https://an0nym0usl.github.io",
     "base": "/varco",
     "repo": "https://github.com/An0nym0usl/varco",
+    "feedback": "https://github.com/An0nym0usl/varco/discussions",
     "lang": "it"
   },
   "owner": {
@@ -31,7 +32,14 @@
   },
   "analytics": {
     "provider": "none",
-    "token": ""
+    "token": "",
+    "key": "",
+    "host": "https://eu.i.posthog.com"
+  },
+  "seo": {
+    "googleSiteVerification": "",
+    "bingSiteVerification": "",
+    "indexNowKey": "6c1f3f0e8b5d4a2c9e7f1b3d5a8c0e2f"
   },
   "psi": {
     "apiKey": ""

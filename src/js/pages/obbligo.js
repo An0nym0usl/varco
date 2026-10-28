@@ -2,6 +2,7 @@ import { $ } from '../lib/ui.js';
 import { html } from '../lib/escape.js';
 import { assessEaa } from '../lib/wizard.js';
 import { read, write } from '../lib/store.js';
+import { track } from '../lib/analytics.js';
 
 const form = $('[data-wizard]');
 const out = $('[data-wizard-result]');
@@ -44,6 +45,7 @@ form.addEventListener('submit', (e) => {
   if (problem) return;
   write('wizard', a);
   const r = assessEaa(a);
+  track('wizard_result', { outcome: r.outcome });
   out.innerHTML = html`<div class="card result result--${r.outcome}">
     <p class="eyebrow">Risultato</p>
     <h2>${r.title}</h2>

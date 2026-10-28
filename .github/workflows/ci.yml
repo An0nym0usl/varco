@@ -59,6 +59,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Remember the content of the current deployment (for IndexNow)
+        run: curl -sf "https://an0nym0usl.github.io/varco/pages.json" -o old-pages.json || echo '{"pages":{}}' > old-pages.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -72,3 +74,5 @@ jobs:
             echo "Retrying in 20s (CDN propagation)…"; sleep 20
           done
           exit 1
+      - name: Notify search engines of changed pages (IndexNow)
+        run: node scripts/indexnow.mjs old-pages.json dist/pages.json

@@ -2,7 +2,15 @@ import { html } from '../js/lib/escape.js';
 
 export default (ctx) => {
   const o = ctx.config.owner;
-  const analytics = ctx.config.analytics.provider === 'cloudflare' && ctx.config.analytics.token;
+  const a = ctx.config.analytics;
+  const analyticsText = a.provider === 'posthog' && a.key
+    ? "Contiamo in forma anonima le pagine visitate e alcune azioni (per esempio «analisi completata» o «testo copiato») con PostHog, ospitato nell'Unione europea. Non usiamo cookie e non salviamo identificativi sul tuo dispositivo: ogni pagina ha un codice casuale che non ti segue tra visite diverse. Non inviamo mai il contenuto delle analisi, gli indirizzi delle pagine analizzate o ciò che scrivi nei moduli."
+    : a.provider === 'cloudflare' && a.token
+      ? 'Usiamo Cloudflare Web Analytics, che non usa cookie e non traccia le persone tra siti diversi, per contare le visite in forma aggregata.'
+      : 'Al momento non usiamo strumenti di statistica.';
+  const psiText = ctx.config.psi?.apiKey
+    ? "Se usi «Inserisci l'indirizzo», l'indirizzo della pagina viene inviato a Google PageSpeed Insights, che la apre e la analizza dai propri server secondo i termini di Google."
+    : '';
   const owner = o.legalName
     ? html`<p>${o.legalName}${o.vatNumber ? html` · P. IVA ${o.vatNumber}` : ''}${o.address ? html` · ${o.address}` : ''}${o.contactEmail ? html` · <a href="mailto:${o.contactEmail}">${o.contactEmail}</a>` : ''}</p>`
     : html`<p>Varco è un progetto indipendente in fase di avvio. I dati completi del titolare saranno pubblicati qui prima dell'attivazione dei pagamenti. Nel frattempo puoi scriverci aprendo una segnalazione su <a href="${ctx.config.site.repo}/issues">GitHub</a>.</p>`;
@@ -20,7 +28,8 @@ export default (ctx) => {
     <li><strong>Analisi delle pagine.</strong> Il controllo di accessibilità avviene nel tuo browser. Il pulsante Varco carica uno script da questo sito; il contenuto delle pagine analizzate non viene inviato a Varco né a terzi.</li>
     <li><strong>Dati salvati nel browser.</strong> Report, progetti, checklist, bozze delle informazioni di accessibilità e licenza sono salvati nella memoria locale (localStorage) del tuo browser. Non li riceviamo. Puoi cancellarli in qualsiasi momento con il pulsante qui sotto.</li>
     <li><strong>Hosting.</strong> Il sito è pubblicato con GitHub Pages (GitHub, Inc.), che registra dati tecnici come l'indirizzo IP per motivi di sicurezza e funzionamento. Vedi l'<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">informativa di GitHub</a>.</li>
-    <li><strong>Statistiche.</strong> ${analytics ? html`Usiamo Cloudflare Web Analytics, che non usa cookie e non traccia le persone tra siti diversi, per contare le visite in forma aggregata.` : 'Al momento non usiamo strumenti di statistica.'}</li>
+    <li><strong>Statistiche.</strong> ${analyticsText}</li>
+    ${psiText ? html`<li><strong>Analisi da indirizzo.</strong> ${psiText}</li>` : ''}
     <li><strong>Licenze e pagamenti.</strong> Gli acquisti sono gestiti da Polar (polar.sh), che agisce come rivenditore (merchant of record) e tratta i dati di pagamento secondo la propria <a href="https://polar.sh/legal/privacy">informativa</a>. Quando attivi una licenza, la chiave viene inviata a Polar per la verifica.</li>
   </ul>
   <h2>I tuoi diritti</h2>

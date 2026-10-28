@@ -108,7 +108,8 @@ export default (ctx) => {
 
     <section id="vigilanza">
       <h2>Vigilanza in Italia</h2>
-      <p>In Italia la vigilanza sull'accessibilità dei servizi digitali è affidata principalmente ad AgID, l'Agenzia per l'Italia Digitale; per alcuni settori intervengono anche le autorità di settore. Nel 2026 AgID ha adottato le linee guida sull'accessibilità dei servizi (determinazione n. 38/2026, Gazzetta Ufficiale n. 69 del 24 marzo 2026), ha attivato un canale pubblico per le segnalazioni e ha approvato il regolamento sul procedimento di verifica e sanzione (determinazione n. 84/2026). Il D.Lgs. 82/2022 prevede sanzioni amministrative per chi non rispetta i requisiti.</p>
+      <p>In Italia la vigilanza sull'accessibilità dei servizi digitali è affidata principalmente ad AgID, l'Agenzia per l'Italia Digitale; per alcuni settori intervengono anche le autorità di settore. Nel 2026 AgID ha adottato le linee guida sull'accessibilità dei servizi (determinazione n. 38/2026, Gazzetta Ufficiale n. 69 del 24 marzo 2026), ha attivato un canale pubblico per le segnalazioni e ha approvato il regolamento sul procedimento di verifica e sanzione (determinazione n. 84/2026).</p>
+      <p>Le sanzioni sono fissate dall'<a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2022-05-27;82~art24">art. 24 del D.Lgs. 82/2022</a>: da 5.000 a 40.000 euro per l'operatore economico che non rispetta requisiti e obblighi, tenendo conto dell'entità della non conformità e del numero di utenti coinvolti; da 2.500 a 30.000 euro per chi non esegue quanto disposto dall'autorità di vigilanza o non collabora con essa.</p>
     </section>
 
     <section id="iniziare">

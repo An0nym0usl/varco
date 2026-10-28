@@ -5,7 +5,7 @@ import { summarize } from './normalize.js';
 import RULES from '../../data/rules.it.js';
 
 const PLATFORMS = { wordpress: 'WordPress', shopify: 'Shopify', wix: 'Wix' };
-export const SOURCE_LABEL = { bookmarklet: 'Pulsante Varco', demo: 'Negozio di esempio', paste: 'Codice HTML incollato', import: 'Risultati importati' };
+export const SOURCE_LABEL = { bookmarklet: 'Pulsante Varco', demo: 'Negozio di esempio', paste: 'Codice HTML incollato', url: 'Indirizzo (Google PageSpeed Insights)', import: 'Risultati importati' };
 
 export const ruleTitle = (rule) => RULES[rule.id]?.t ?? rule.help ?? rule.id;
 
@@ -120,7 +120,7 @@ export function reportHtml(scan, { base, branding, dateText }) {
     </section>
     <section class="report-section" aria-labelledby="metodo">
       <h2 id="metodo">Metodo e limiti</h2>
-      <p>Analisi automatica eseguita con axe-core sulle regole WCAG 2.0, 2.1 e 2.2 di livello A e AA e sulle buone pratiche; ogni regola indica il criterio WCAG e la clausola della norma EN 301 549. I test automatici rilevano solo una parte dei problemi di accessibilità: completa i controlli della <a href="${base}/checklist/">checklist manuale</a>. I contenuti dentro iframe non sono analizzati.${scan.source === 'paste' ? ' Analisi del codice HTML incollato: script e contenuti generati da JavaScript sono esclusi.' : ''}</p>
+      <p>Analisi automatica eseguita con axe-core sulle regole WCAG 2.0, 2.1 e 2.2 di livello A e AA e sulle buone pratiche; ogni regola indica il criterio WCAG e la clausola della norma EN 301 549. I test automatici rilevano solo una parte dei problemi di accessibilità: completa i controlli della <a href="${base}/checklist/">checklist manuale</a>. I contenuti dentro iframe non sono analizzati.${scan.source === 'paste' ? ' Analisi del codice HTML incollato: script e contenuti generati da JavaScript sono esclusi.' : ''}${scan.source === 'url' ? " Analisi da indirizzo eseguita da Google PageSpeed Insights (Lighthouse): copre una parte delle regole di axe-core, la gravità è quella tipica di ogni regola e le pagine dietro accesso (carrello, checkout, area clienti) non sono raggiungibili: per quelle usa il pulsante Varco." : ''}</p>
       <p>Questo report non certifica la conformità e non costituisce consulenza legale.</p>
     </section>`;
 }

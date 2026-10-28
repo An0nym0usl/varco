@@ -46,7 +46,8 @@ export default (ctx) => {
   <p class="eyebrow">Prezzi</p>
   <h1>Gratis per verificare. A pagamento per lavorare in grande.</h1>
   <p class="lead">Tutte le funzioni che servono a trovare e capire i problemi sono gratuite. I piani a pagamento aggiungono ciò che serve a chi gestisce più siti o consegna report ai clienti.</p>
-  ${anyLive ? '' : html`<p class="callout" role="note">Gli acquisti non sono ancora attivi: stiamo completando la configurazione dei pagamenti. Nel frattempo tutte le funzioni gratuite sono disponibili.</p>`}
+  ${anyLive ? '' : html`<p class="callout" role="note">Gli acquisti non sono ancora attivi: stiamo completando la configurazione dei pagamenti. Nel frattempo tutte le funzioni gratuite sono disponibili. Vuoi un piano a pagamento appena esce, o ti serve qualcosa in più? <a href="${ctx.config.site.feedback}">Diccelo nelle discussioni del progetto</a>.</p>`}
+  <p>Lavori in una web agency? <a href="${ctx.url('/agenzie/')}">Ecco come usare Varco con i tuoi clienti</a>.</p>
 </div>
 <div class="wrap plans">
   ${plans.map((pl) => html`<section class="plan card${pl.featured ? ' plan--featured' : ''}" aria-labelledby="piano-${pl.id}">

@@ -4,6 +4,7 @@
     "origin": "http://127.0.0.1:4175",
     "base": "/varco",
     "repo": "https://github.com/An0nym0usl/varco",
+    "feedback": "https://github.com/An0nym0usl/varco/discussions",
     "lang": "it"
   },
   "owner": { "legalName": "", "vatNumber": "", "address": "", "contactEmail": "" },
@@ -21,6 +22,7 @@
     },
     "prices": { "pro": 49, "agenzia": 149 }
   },
-  "analytics": { "provider": "none", "token": "" },
-  "psi": { "apiKey": "" }
+  "analytics": { "provider": "posthog", "token": "", "key": "phc_test_project_key", "host": "http://127.0.0.1:4175/__ph" },
+  "seo": { "googleSiteVerification": "test-google-token", "bingSiteVerification": "", "indexNowKey": "6c1f3f0e8b5d4a2c9e7f1b3d5a8c0e2f" },
+  "psi": { "apiKey": "test-psi-key" }
 }

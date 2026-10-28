@@ -5,6 +5,7 @@ import { limits } from '../lib/plan.js';
 import { ruleTitle } from '../lib/report-view.js';
 import { buildStatementHtml, buildStatementText } from '../lib/statement.js';
 import CHECKLIST from '../../data/checklist.it.js';
+import { track } from '../lib/analytics.js';
 
 const cfg = getConfig();
 const form = $('[data-statement-form]');
@@ -92,9 +93,11 @@ form.addEventListener('input', () => { save(); render(); });
 form.addEventListener('change', () => { save(); render(); });
 
 const done = (msg) => { statusEl.textContent = msg; };
-$('[data-copy-html]').addEventListener('click', async () => done(await copyText(buildStatementHtml(values(), { credit: lim.statementCredit, creditUrl })) ? 'HTML copiato.' : 'Copia non riuscita.'));
-$('[data-copy-text]').addEventListener('click', async () => done(await copyText(buildStatementText(values(), { credit: lim.statementCredit })) ? 'Testo copiato.' : 'Copia non riuscita.'));
+const used = (format) => track('statement_export', { format, issues: issues.length, plan: lim.plan });
+$('[data-copy-html]').addEventListener('click', async () => { used('html'); done(await copyText(buildStatementHtml(values(), { credit: lim.statementCredit, creditUrl })) ? 'HTML copiato.' : 'Copia non riuscita.'); });
+$('[data-copy-text]').addEventListener('click', async () => { used('text'); done(await copyText(buildStatementText(values(), { credit: lim.statementCredit })) ? 'Testo copiato.' : 'Copia non riuscita.'); });
 $('[data-download]').addEventListener('click', () => {
+  used('file');
   const body = buildStatementHtml(values(), { credit: lim.statementCredit, creditUrl });
   download('informazioni-accessibilita.html', `<!doctype html>\n<html lang="it">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Informazioni sull'accessibilità del servizio</title>\n</head>\n<body>\n${body}\n</body>\n</html>\n`, 'text/html;charset=utf-8');
   done('File scaricato.');

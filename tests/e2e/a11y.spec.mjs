@@ -5,7 +5,7 @@ import { createRequire } from 'node:module';
 const axePath = createRequire(import.meta.url).resolve('axe-core/axe.min.js');
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
 const PAGES = ['/', '/verifica/', '/report/', '/obbligo/', '/checklist/', '/dichiarazione/', '/prezzi/', '/licenza/', '/grazie/',
-  '/guida/european-accessibility-act/', '/guida/dichiarazione-accessibilita-ecommerce/', '/guida/eaa-microimprese/', '/regole/', '/regole/color-contrast/', '/regole/aria-dialog-name/', '/privacy/', '/termini/',
+  '/guida/european-accessibility-act/', '/guida/dichiarazione-accessibilita-ecommerce/', '/guida/eaa-microimprese/', '/agenzie/', '/regole/', '/regole/color-contrast/', '/regole/aria-dialog-name/', '/privacy/', '/termini/',
   '/note-legali/', '/acquista/pro/', '/pagina-che-non-esiste/'];
 
 test.use({ bypassCSP: true });
