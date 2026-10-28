@@ -364,6 +364,13 @@ pre.snippet, .code-compare pre { background: var(--code-bg); color: var(--code-f
 .cta-card .button--primary { background: var(--signal); border-color: var(--signal); color: #15181b; }
 .cta-card :focus-visible { outline-color: var(--signal); }
 
+/* Data tables in guides: the wrapper scrolls on phones so the page never does. */
+.table-wrap { overflow-x: auto; margin-bottom: 1em; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
+.cases { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 0.97rem; }
+.cases caption { text-align: left; padding: 12px 14px 4px; font-weight: 700; }
+.cases th, .cases td { text-align: left; vertical-align: top; padding: 10px 14px; border-top: 1px solid var(--line); }
+.cases thead th { font-family: var(--font-display); font-weight: 800; }
+
 /* License */
 .current-plan { margin-bottom: 18px; }
 

@@ -14,6 +14,7 @@ const checks = [
   ['prezzi/', (t) => t.includes('Agenzia')],
   ['guida/european-accessibility-act/', (t) => t.includes('Allegato V')],
   ['guida/dichiarazione-accessibilita-ecommerce/', (t) => t.includes('Bottega Esempio srl')],
+  ['guida/eaa-microimprese/', (t) => t.includes('Microimpresa: esente')],
   ['regole/image-alt/', (t) => t.includes('Immagini senza testo alternativo')],
   ['demo/negozio/', (t) => t.includes('data-varco-demo')],
   ['sitemap.xml', (t) => t.includes('<urlset')],

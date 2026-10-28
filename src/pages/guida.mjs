@@ -70,7 +70,7 @@ export default (ctx) => {
     <section id="microimprese">
       <h2>Le microimprese</h2>
       <p>È microimpresa chi occupa meno di 10 persone e ha un fatturato annuo oppure un totale di bilancio annuo non superiore a 2 milioni di euro (art. 3, punto 23). Le microimprese che forniscono servizi sono esentate dai requisiti di accessibilità e da ogni obbligo collegato (art. 4, paragrafo 5).</p>
-      <p>L'esenzione riguarda i servizi: per chi fabbrica, importa o distribuisce prodotti coperti dalla direttiva valgono regole diverse. E se l'impresa cresce oltre le soglie, gli obblighi scattano.</p>
+      <p>L'esenzione riguarda i servizi: per chi fabbrica, importa o distribuisce prodotti coperti dalla direttiva valgono regole diverse. E se l'impresa cresce oltre le soglie, gli obblighi scattano. Approfondisci con gli <a href="${u('/guida/eaa-microimprese/')}">esempi di calcolo per le microimprese</a>.</p>
     </section>
 
     <section id="informazioni">

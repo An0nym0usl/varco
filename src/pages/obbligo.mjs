@@ -63,6 +63,7 @@ export default (ctx) => ({
   <aside class="side-note" aria-labelledby="come-valutiamo">
     <h2 id="come-valutiamo">Come valutiamo</h2>
     <p>Applichiamo le definizioni della Direttiva (UE) 2019/882: i servizi coperti (art. 2), la definizione di microimpresa (art. 3, punto 23) e la sua esenzione per i servizi (art. 4, paragrafo 5), più la Legge 4/2004 per le imprese molto grandi.</p>
+    <p>Dubbi sulle soglie? Leggi gli <a href="${ctx.url('/guida/eaa-microimprese/')}">esempi di calcolo per le microimprese</a>.</p>
     <p>È una prima valutazione, non una consulenza legale: nei casi dubbi confrontati con un professionista.</p>
   </aside>
 </div>

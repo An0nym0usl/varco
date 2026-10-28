@@ -1,7 +1,7 @@
 // Runs on a phone-sized viewport (Pixel 7 project).
 import { test, expect } from '@playwright/test';
 
-const PAGES = ['/', '/verifica/', '/report/', '/obbligo/', '/checklist/', '/dichiarazione/', '/prezzi/', '/guida/european-accessibility-act/', '/regole/image-alt/'];
+const PAGES = ['/', '/verifica/', '/report/', '/obbligo/', '/checklist/', '/dichiarazione/', '/prezzi/', '/guida/european-accessibility-act/', '/guida/eaa-microimprese/', '/regole/image-alt/'];
 
 for (const path of PAGES) {
   test(`${path} fits a phone screen without horizontal scrolling`, async ({ page }) => {
