@@ -52,7 +52,7 @@ test('bookmarklet scans a third-party page and hands results to the report', asy
 
   await page.goto(FIXTURE);
   await page.evaluate((c) => (0, eval)(c.slice('javascript:'.length)), code);
-  await expect(page.getByText(/Trovati \d+ tipi di problema/)).toBeVisible();
+  await expect(page.getByText(/Trovat[oi] \d+ tip[oi] di problema/)).toBeVisible();
   await page.getByRole('button', { name: /Mostra nella pagina: / }).first().click();
   await expect(page.locator('[data-varco-flag]').first()).toBeAttached();
   const [report] = await Promise.all([

@@ -148,8 +148,9 @@
   function render(scan) {
     var counts = { critical: 0, serious: 0, moderate: 0, minor: 0 }, elements = 0;
     scan.violations.forEach(function (r) { counts[r.impact] = (counts[r.impact] || 0) + 1; elements += r.nodeCount; });
-    setStatus(scan.violations.length
-      ? 'Trovati ' + scan.violations.length + ' tipi di problema su ' + elements + ' elementi. Regole superate: ' + scan.passes.length + '.'
+    var n = scan.violations.length;
+    setStatus(n
+      ? (n === 1 ? 'Trovato 1 tipo di problema' : 'Trovati ' + n + ' tipi di problema') + ' su ' + elements + (elements === 1 ? ' elemento' : ' elementi') + '. Regole superate: ' + scan.passes.length + '.'
       : 'Nessun problema rilevato automaticamente (' + scan.passes.length + ' regole superate). Completa comunque i controlli manuali.');
     ['critical', 'serious', 'moderate', 'minor'].forEach(function (k) {
       var li = node('li'); var b = node('b', null, String(counts[k])); li.appendChild(b); li.appendChild(document.createTextNode(IMPACT_IT[k])); countsEl.appendChild(li);
