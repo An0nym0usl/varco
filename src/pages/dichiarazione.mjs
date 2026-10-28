@@ -16,7 +16,7 @@ export default (ctx) => ({
 <div class="wrap page-head">
   <p class="eyebrow">Generatore</p>
   <h1>Informazioni sull'accessibilità del servizio</h1>
-  <p class="lead">L'EAA chiede ai fornitori di servizi di spiegare, nelle condizioni generali o in un documento equivalente, come il servizio soddisfa i requisiti di accessibilità (art. 13 e Allegato V della Direttiva 2019/882). Compila i campi: il testo si aggiorna mentre scrivi.</p>
+  <p class="lead">L'EAA chiede ai fornitori di servizi di spiegare, nelle condizioni generali o in un documento equivalente, come il servizio soddisfa i requisiti di accessibilità (art. 13 e Allegato V della Direttiva 2019/882). Compila i campi: il testo si aggiorna mentre scrivi. Ti serve un modello? Guarda l'<a href="${ctx.url('/guida/dichiarazione-accessibilita-ecommerce/')}">esempio completo per un e-commerce</a>.</p>
 </div>
 
 <div class="wrap statement-layout">

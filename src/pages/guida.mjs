@@ -82,6 +82,7 @@ export default (ctx) => {
         <li>le descrizioni e spiegazioni necessarie a comprenderne il funzionamento;</li>
         <li>una descrizione di come il servizio soddisfa i requisiti di accessibilità dell'Allegato I.</li>
       </ol>
+      <p>Vedi un <a href="${u('/guida/dichiarazione-accessibilita-ecommerce/')}">esempio completo per un e-commerce</a>, commentato.</p>
       <p><a class="button button--primary" href="${u('/dichiarazione/')}">Crea le informazioni di accessibilità</a></p>
     </section>
 

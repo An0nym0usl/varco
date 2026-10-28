@@ -98,7 +98,7 @@ const ctx = {
   asset: (p) => `${base}/${p}?v=${buildId}`,
 };
 
-const PAGES = ['home', 'verifica', 'report', 'obbligo', 'checklist', 'dichiarazione', 'prezzi', 'acquista', 'licenza', 'grazie', 'guida', 'regole', 'legali', 'errore'];
+const PAGES = ['home', 'verifica', 'report', 'obbligo', 'checklist', 'dichiarazione', 'prezzi', 'acquista', 'licenza', 'grazie', 'guida', 'esempio', 'regole', 'legali', 'errore'];
 const written = [];
 for (const name of PAGES) {
   const make = await imp(`pages/${name}.mjs`);
