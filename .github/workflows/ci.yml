@@ -61,7 +61,7 @@ jobs:
       - run: npm run build
       - name: Remember the content of the current deployment (for IndexNow)
         run: curl -sf "https://an0nym0usl.github.io/varco/pages.json" -o old-pages.json || echo '{"pages":{}}' > old-pages.json
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
